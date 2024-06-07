@@ -6,4 +6,6 @@ Learning By Doing Spring Boot
 
 # Feature
 - Config Log Interceptor (Documentation For Logging And Debugging)
+- Handling Path Not Found (Custom Error Default Spring "/error")
+- Connection Database (PostgresSQL With Spring Data JPA)
 - next soon ?

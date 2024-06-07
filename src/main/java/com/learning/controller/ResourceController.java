@@ -1,5 +1,7 @@
 package com.learning.controller;
 
+import com.learning.exception.DatabaseException;
+import com.learning.exception.GeneralException;
 import com.learning.model.application.Response;
 import com.learning.service.ResourceService;
 import lombok.extern.slf4j.Slf4j;
@@ -19,12 +21,21 @@ public class ResourceController {
         this.resourceService = resourceService;
     }
 
+    @GetMapping(path = "/resource/create")
+    public Object create() throws DatabaseException {
+        Object result = resourceService.createSource();
+        return Response.builder()
+                .data(result)
+                .responseCode("00")
+                .build();
+    }
+
     @GetMapping(path = "/fetch/{resource}")
-    public Object fetchResource(@PathVariable String resource) {
+    public Object fetchResource(@PathVariable String resource) throws DatabaseException, GeneralException {
         Object result = resourceService.fetchResource(resource);
         return Response.builder()
                 .data(result)
-                .statusCode("00")
+                .responseCode("00")
                 .build();
     }
 }

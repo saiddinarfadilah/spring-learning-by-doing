@@ -7,5 +7,5 @@ import lombok.Data;
 @Builder
 public class Response {
     private Object data;
-    private String statusCode;
+    private String responseCode;
 }
