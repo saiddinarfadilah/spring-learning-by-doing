@@ -9,16 +9,21 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.io.IOException;
 import java.util.UUID;
 
 @Component
 @Slf4j
-public class LogInterceptor implements HandlerInterceptor {
+public class InterceptorConfig implements HandlerInterceptor {
 
     private Long startTime;
 
     @Override
     public boolean preHandle(@NonNull HttpServletRequest request, @NonNull HttpServletResponse response, @NonNull Object handler) {
+        if (request.getRequestURI().equalsIgnoreCase("/error") || request.getRequestURI().equalsIgnoreCase("/_/health")) {
+            return true;
+        }
+
         String correlationId = request.getHeader("correlation-id");
         if (correlationId == null) {
             correlationId = UUID.randomUUID().toString();
@@ -27,21 +32,23 @@ public class LogInterceptor implements HandlerInterceptor {
         MDC.put("app", "spring-learning-by-doing");
         MDC.put("correlationId", correlationId);
 
-        log.info(" <<<<< START PROCESS >>>>>");
+        log.info("<<<<< START PROCESS >>>>>");
         log.info("Host {} {} {}://{}:{}{}", request.getRemoteAddr(), request.getMethod(), request.getScheme(),
                 request.getServerName(), request.getServerPort(), request.getRequestURI());
         response.setHeader("X-Correlation-ID", correlationId);
         startTime = System.nanoTime();
+
         return true;
     }
 
     @Override
-    public void postHandle(@NonNull HttpServletRequest request, @NonNull HttpServletResponse response, @NonNull Object handler, ModelAndView modelAndView) {
+    public void postHandle(@NonNull HttpServletRequest request, @NonNull HttpServletResponse response, @NonNull Object handler,
+                           ModelAndView modelAndView) throws IOException {
         Long endTime = System.nanoTime();
         long elapsedTimeInMillis = (endTime - startTime) / 1_000_000;
         String elapsedTime = (elapsedTimeInMillis > 1000) ? (elapsedTimeInMillis / 1000) + " seconds" : elapsedTimeInMillis + " ms";
 
-        log.info(" <<<<<  END PROCESS  >>>>> {}", elapsedTime);
+        log.info("<<<<<  END PROCESS  >>>>> {}", elapsedTime);
         MDC.clear();
     }
 }

@@ -5,16 +5,16 @@ import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
-public class WebConfigurer implements WebMvcConfigurer {
+public class WebConfig implements WebMvcConfigurer {
 
-    private final LogInterceptor logInterceptor;
+    private final InterceptorConfig interceptorConfig;
 
-    public WebConfigurer(LogInterceptor logInterceptor) {
-        this.logInterceptor = logInterceptor;
+    public WebConfig(InterceptorConfig interceptorConfig) {
+        this.interceptorConfig = interceptorConfig;
     }
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(logInterceptor).addPathPatterns("/**");
+        registry.addInterceptor(interceptorConfig).addPathPatterns("/**");
     }
 }
