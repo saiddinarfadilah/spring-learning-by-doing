@@ -21,13 +21,13 @@ public class ErrorConfig implements ErrorController {
                 return new ResponseEntity<>(
                         Response.builder()
                                 .data(null)
-                                .statusCode("404").build(),
+                                .responseCode("02").build(),
                         HttpStatus.NOT_FOUND);
             } else if (code == HttpStatus.INTERNAL_SERVER_ERROR.value()) {
                 return new ResponseEntity<>(
                         Response.builder()
                                 .data(null)
-                                .statusCode("500").build(),
+                                .responseCode("09").build(),
                         HttpStatus.INTERNAL_SERVER_ERROR);
             }
         }
@@ -35,7 +35,7 @@ public class ErrorConfig implements ErrorController {
         return new ResponseEntity<>(
                 Response.builder()
                         .data(null)
-                        .statusCode("500").build(),
+                        .responseCode("09").build(),
                 HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }
