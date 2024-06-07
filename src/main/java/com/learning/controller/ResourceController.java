@@ -1,4 +1,4 @@
-package com.learning.route;
+package com.learning.controller;
 
 import com.learning.model.application.Response;
 import com.learning.service.ResourceService;
@@ -8,16 +8,14 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.Map;
-
 @RestController
 @RequestMapping(value = "/v1")
 @Slf4j
-public class ResourceRoute {
+public class ResourceController {
 
     private final ResourceService resourceService;
 
-    public ResourceRoute (ResourceService resourceService) {
+    public ResourceController(ResourceService resourceService) {
         this.resourceService = resourceService;
     }
 
