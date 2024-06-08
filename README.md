@@ -8,4 +8,5 @@ Learning By Doing Spring Boot
 - Config Log Interceptor (Documentation For Logging And Debugging)
 - Handling Path Not Found (Custom Error Default Spring "/error")
 - Connection Database (PostgresSQL With Spring Data JPA)
+- Rest Client (RestTemplate)
 - next soon ?

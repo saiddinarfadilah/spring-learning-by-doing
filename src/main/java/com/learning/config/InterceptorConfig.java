@@ -37,7 +37,7 @@ public class InterceptorConfig implements HandlerInterceptor {
         MDC.put("correlationId", correlationId);
 
         log.info("<<<<< START PROCESS >>>>>");
-        log.info("IP Address {} {} {}://{}:{}{}", request.getRemoteAddr(), request.getMethod(), request.getScheme(),
+        log.info("{} {} {}://{}:{}{}", request.getRemoteAddr(), request.getMethod(), request.getScheme(),
                 request.getServerName(), request.getServerPort(), request.getRequestURI());
         response.setHeader("X-Correlation-ID", correlationId);
         startTime = System.nanoTime();
