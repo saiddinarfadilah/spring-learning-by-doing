@@ -10,4 +10,5 @@ Learning By Doing Spring Boot
 - Connection Database (PostgresSQL With Spring Data JPA)
 - Rest Client (RestTemplate)
 - Unit Test Level Service (JUnit & Mockito)
+- Dockerfile (Build image need for deployment)
 - next soon ?
