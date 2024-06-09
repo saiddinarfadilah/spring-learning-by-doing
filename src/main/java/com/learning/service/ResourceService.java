@@ -5,14 +5,13 @@ import com.learning.entity.Resource;
 import com.learning.exception.APIException;
 import com.learning.exception.DatabaseException;
 import com.learning.exception.GeneralException;
+import com.learning.model.application.Response;
 import com.learning.repository.impl.ResourceRepositoryImpl;
 import com.learning.util.StringUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-
-import java.util.LinkedHashMap;
-import java.util.Map;
 
 @Service
 @Slf4j
@@ -31,38 +30,62 @@ public class ResourceService {
         this.stringUtil = stringUtil;
     }
 
-    public String createSource() {
+    public ResponseEntity<Response> createResource() {
         Resource resource = new Resource();
         resource.setSourceName("database");
-
         try {
             resourceRepository.save(resource);
-            return "source save successfully";
+            return ResponseEntity.ok(Response.builder()
+                    .data("resource save successfully")
+                    .responseCode("00")
+                    .build());
         } catch (DatabaseException e) {
             log.error(e.getMessage());
+            return ResponseEntity.ok(Response.builder()
+                    .data(null)
+                    .responseCode("03")
+                    .build());
         }
-
-        return null;
     }
 
-    public Object fetchResource(String resourceName) {
+    public ResponseEntity<Response> fetchResource(String resourceName) {
         if (resourceName.equals("api")) {
             try {
                 Object resource = restClient.callAPI("something", apiUrl, "GET", null);
                 log.info("Outgoing Response : {}", stringUtil.toString(resource));
-                return resource;
+                return ResponseEntity.ok(Response.builder()
+                        .data(resource)
+                        .responseCode("00")
+                        .build());
             } catch (APIException | GeneralException e) {
                 log.error(e.getMessage());
+                return switchException(e.getMessage());
             }
         } else {
             try {
                 Resource resource = resourceRepository.find();
                 log.info("Outgoing Response : {}", stringUtil.toString(resource));
-                return resource;
+                return ResponseEntity.ok(Response.builder()
+                        .data(resource)
+                        .responseCode("00")
+                        .build());
             } catch (DatabaseException | GeneralException e) {
                 log.error(e.getMessage());
+                return switchException(e.getMessage());
             }
         }
-        return null;
+    }
+
+    private ResponseEntity<Response> switchException(String message) {
+        if (message.contains("(System) Database Error")) {
+            return ResponseEntity.ok(Response.builder()
+                    .data(null)
+                    .responseCode("03")
+                    .build());
+        }
+        return ResponseEntity.ok(Response.builder()
+                .data(null)
+                .responseCode("04")
+                .build());
     }
 }

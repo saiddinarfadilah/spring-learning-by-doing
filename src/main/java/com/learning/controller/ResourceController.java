@@ -22,20 +22,12 @@ public class ResourceController {
     }
 
     @GetMapping(path = "/resource/create")
-    public Object create() throws DatabaseException {
-        Object result = resourceService.createSource();
-        return Response.builder()
-                .data(result)
-                .responseCode("00")
-                .build();
+    public Object create() {
+        return resourceService.createResource();
     }
 
     @GetMapping(path = "/fetch/{resource}")
-    public Object fetchResource(@PathVariable String resource) throws DatabaseException, GeneralException {
-        Object result = resourceService.fetchResource(resource);
-        return Response.builder()
-                .data(result)
-                .responseCode("00")
-                .build();
+    public Object fetchResource(@PathVariable String resource) {
+        return resourceService.fetchResource(resource);
     }
 }
