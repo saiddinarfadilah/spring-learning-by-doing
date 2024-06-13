@@ -1,5 +1,7 @@
 package com.learning.entity;
 
+import com.learning.exception.GeneralException;
+import com.learning.util.StringUtil;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.proxy.HibernateProxy;
@@ -26,8 +28,8 @@ public class Resource {
     private Timestamp updatedAt;
 
     @PrePersist
-    protected void onCreate() {
-        idSource = UUID.randomUUID().toString();
+    protected void onCreate() throws GeneralException {
+        idSource  = String.valueOf(StringUtil.generateUuidV7());
         createdAt = new Timestamp(System.currentTimeMillis());
     }
 

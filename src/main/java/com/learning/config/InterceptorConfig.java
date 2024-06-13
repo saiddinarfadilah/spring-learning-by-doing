@@ -1,5 +1,7 @@
 package com.learning.config;
 
+import com.learning.exception.GeneralException;
+import com.learning.util.StringUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
@@ -23,21 +25,22 @@ public class InterceptorConfig implements HandlerInterceptor {
     private Long startTime;
 
     @Override
-    public boolean preHandle(@NonNull HttpServletRequest request, @NonNull HttpServletResponse response, @NonNull Object handler) {
+    public boolean preHandle(@NonNull HttpServletRequest request, @NonNull HttpServletResponse response, @NonNull Object handler) throws GeneralException {
         if (request.getRequestURI().equalsIgnoreCase("/error")) {
             return true;
         }
 
         String correlationId = request.getHeader("correlation-id");
         if (correlationId == null) {
-            correlationId = UUID.randomUUID().toString();
+            correlationId = String.valueOf(StringUtil.generateUuidV7());
         }
 
         MDC.put("app", appName);
         MDC.put("correlationId", correlationId);
+        MDC.put("ip", request.getRemoteAddr());
 
         log.info("<<<<< START PROCESS >>>>>");
-        log.info("{} {} {}://{}:{}{}", request.getRemoteAddr(), request.getMethod(), request.getScheme(),
+        log.info("{} {}://{}:{}{}", request.getMethod(), request.getScheme(),
                 request.getServerName(), request.getServerPort(), request.getRequestURI());
         response.setHeader("X-Correlation-ID", correlationId);
         startTime = System.nanoTime();

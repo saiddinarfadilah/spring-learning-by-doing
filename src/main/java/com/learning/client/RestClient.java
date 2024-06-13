@@ -17,11 +17,11 @@ import java.util.List;
 public class RestClient {
 
 
-    private final RestTemplate restTemplate;
+    private final RestTemplate primary;
     private final StringUtil stringUtil;
 
-    public RestClient(RestTemplate restTemplate, StringUtil stringUtil) {
-        this.restTemplate = restTemplate;
+    public RestClient(RestTemplate primary, StringUtil stringUtil) {
+        this.primary = primary;
         this.stringUtil = stringUtil;
     }
 
@@ -35,7 +35,7 @@ public class RestClient {
         try {
             log.info("<<<<<  REST CLIENT  >>>>>");
             log.info("{} request  : {} {} headers : {}, body : {}" , destination, HttpMethod.valueOf(method), url, entity.getHeaders(), stringUtil.toString(entity.getBody()));
-            ResponseEntity<Object> exchange = restTemplate.exchange(
+            ResponseEntity<Object> exchange = primary.exchange(
                     url,
                     HttpMethod.valueOf(method),
                     entity,

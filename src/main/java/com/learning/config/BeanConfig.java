@@ -11,16 +11,28 @@ import java.time.Duration;
 @Configuration
 public class BeanConfig {
 
-    @Value("${connect.timeout}")
-    private Integer connectTimeout;
-    @Value("${read.timeout}")
-    private Integer readTimeout;
+    @Value("${connect.timeout.primary}")
+    private Integer connectTimeoutPrimary;
+    @Value("${read.timeout.primary}")
+    private Integer readTimeoutPrimary;
+    @Value("${connect.timeout.secondary}")
+    private Integer connectTimeoutSecondary;
+    @Value("${read.timeout.secondary}")
+    private Integer readTimeoutSecondary;
 
     @Bean
-    public RestTemplate restTemplate(RestTemplateBuilder builder) {
+    public RestTemplate primary(RestTemplateBuilder builder) {
         return builder
-                .setConnectTimeout(Duration.ofSeconds(connectTimeout))
-                .setReadTimeout(Duration.ofSeconds(readTimeout))
+                .setConnectTimeout(Duration.ofSeconds(connectTimeoutPrimary))
+                .setReadTimeout(Duration.ofSeconds(readTimeoutPrimary))
+                .build();
+    }
+
+    @Bean
+    public RestTemplate secondary(RestTemplateBuilder builder) {
+        return builder
+                .setConnectTimeout(Duration.ofSeconds(connectTimeoutSecondary))
+                .setReadTimeout(Duration.ofSeconds(readTimeoutSecondary))
                 .build();
     }
 }

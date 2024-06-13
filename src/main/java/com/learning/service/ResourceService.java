@@ -35,6 +35,7 @@ public class ResourceService {
         resource.setSourceName("database");
         try {
             resourceRepository.save(resource);
+            log.info("Resource saved successfully");
             return ResponseEntity.ok(Response.builder()
                     .data("resource save successfully")
                     .responseCode("00")
